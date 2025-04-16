@@ -1,0 +1,7 @@
+*.pyc
+__pycache__/
+/nnUNet/nnUNet_results_folder/*
+/nnUNet/nnUNet_processed/*
+# Add any other files or folders you want to exclude
+.idea/
+.vscode/

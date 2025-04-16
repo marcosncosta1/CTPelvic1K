@@ -55,7 +55,7 @@ if __name__ == "__main__":
     """
     train_dir = opts.train_dir
     output_folder = opts.output_dir
-    test_dir = "/path/to/testing dataset"
+    test_dir = "/home/mcosta/all_data/nnUNet/CTPelvic1K_TEST"
 
     img_dir = join(output_folder, "imagesTr")
     lab_dir = join(output_folder, "labelsTr")

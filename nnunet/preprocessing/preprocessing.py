@@ -123,8 +123,7 @@ def resample_data_or_seg(data, new_shape, is_seg, axis=None, order=3, do_separat
                     elif axis == 1:
                         reshaped_data.append(resize_fn(data[c, :, slice_id], new_shape_2d, order, cval=cval, **kwargs))
                     else:
-                        reshaped_data.append(resize_fn(data[c, :, :, slice_id], new_shape_2d, order, cval=cval,
-                                                       **kwargs))
+                        reshaped_data.append(resize_fn(data[c, :, :, slice_id], new_shape_2d, order, cval=cval, **kwargs))
                 reshaped_data = np.stack(reshaped_data, axis)
                 if shape[axis] != new_shape[axis]:
 
@@ -161,7 +160,11 @@ def resample_data_or_seg(data, new_shape, is_seg, axis=None, order=3, do_separat
         else:
             reshaped = []
             for c in range(data.shape[0]):
-                reshaped.append(resize_fn(data[c], new_shape, order, cval=cval, **kwargs)[None])
+                if is_seg:
+                    reshaped_slice = resize_fn(data[c], new_shape, order)
+                else:
+                    reshaped_slice = resize_fn(data[c], new_shape, order, cval=cval, **kwargs)
+                reshaped.append(reshaped_slice[None])
             reshaped_final_data = np.vstack(reshaped)
         return reshaped_final_data.astype(dtype_data)
     else:

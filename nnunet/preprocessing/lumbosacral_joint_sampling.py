@@ -82,14 +82,24 @@ def _main_3d_one_case(name, path, crop_size, stage, img_save_path):
     saveimg = (saveimg - saveimg.min()) / (saveimg.max() - saveimg.min()) * 255
     cv2.imwrite(img_save_path + '/' + name + '.png', saveimg)
 def main_3d(base_path, check_save_path):
-    base_path = base_path
+    base_path = os.path.expanduser(base_path)
+    check_save_path = os.path.expanduser(check_save_path)
     stage = 1
 
-    path = f'{base_path}/nnUNet_stage{stage}'
-    plans_path = f'{base_path}/nnUNetPlans_plans_3D.pkl'
+    # path = f'{base_path}/nnUNet_stage{stage}'
+    stage_folder = [d for d in os.listdir(base_path) if d.endswith(f'_stage{stage}')][0]
+    path = os.path.join(base_path, stage_folder)
+    #plans_path = f'{base_path}/nnUNetPlans_plans_3D.pkl'
+    plans_path = os.path.join(base_path, 'nnUNetPlans_plans_3D.pkl')
 
-    names = os.listdir(path)
-    names = [i[:-4] for i in names if i.endswith('.npy')]
+    #names = os.listdir(path)
+    #names = [i[:-4] for i in names if i.endswith('.npy')]
+
+    raw = os.listdir(path)
+    names = []
+    for fn in raw:
+        if fn.endswith('npy') or fn.endswith('npz'):
+            names.append(fn[:-4])
 
     print(len(names),'files to process...')
 
@@ -114,9 +124,9 @@ def main_3d(base_path, check_save_path):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--processed_path", type=str, default=None,
+    parser.add_argument("--processed_path", type=str, default='~/all_data/nnUNet/nnUNet_processed/Task11_CTPelvic1K',
                         help="path to dataset CTPelvic1K")
-    parser.add_argument("--check_save_path", type=str, default=None,
+    parser.add_argument("--check_save_path", type=str, default='~/all_data/nnUNet/nnUNet_processed/Task11_CTPelvic1K/Lumbosacral_Region_Check',
                         help="random seed (default: 42)")
     opts = parser.parse_args()
 
